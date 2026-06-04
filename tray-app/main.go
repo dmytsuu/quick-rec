@@ -101,17 +101,47 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ok"))
 }
 
-// makeTrayIcon generates a colored circle PNG wrapped in ICO format (Vista+ supports PNG-in-ICO).
-func makeTrayIcon(r, g, b uint8) []byte {
+// makeTrayIcon generates a Twitch Glitch pixel-art icon as PNG-in-ICO.
+func makeTrayIcon() []byte {
+	const (
+		T = iota // transparent
+		P        // purple #9146FF
+		W        // white
+	)
+	pixels := [16][16]uint8{
+		{T, T, P, P, P, P, P, P, P, P, P, P, T, T, T, T},
+		{T, P, P, P, P, P, P, P, P, P, P, P, P, T, T, T},
+		{P, P, P, P, P, P, P, P, P, P, P, P, P, P, T, T},
+		{P, P, P, P, P, P, P, P, P, P, P, P, P, P, T, T},
+		{P, P, W, W, P, P, P, P, W, W, P, P, P, P, T, T},
+		{P, P, W, W, P, P, P, P, W, W, P, P, P, P, T, T},
+		{P, P, W, W, P, P, P, P, W, W, P, P, P, P, T, T},
+		{P, P, W, W, P, P, P, P, W, W, P, P, P, P, T, T},
+		{P, P, P, P, P, P, P, P, P, P, P, P, P, P, T, T},
+		{P, P, P, P, P, P, P, P, P, P, P, P, P, P, T, T},
+		{T, P, P, P, P, P, P, P, P, P, P, P, P, T, T, T},
+		{T, T, P, P, P, P, P, P, P, P, P, P, T, T, T, T},
+		{T, T, T, P, P, T, T, T, T, P, P, T, T, T, T, T},
+		{T, T, T, P, P, T, T, T, T, P, P, T, T, T, T, T},
+		{T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T},
+		{T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T},
+	}
+
+	purple := color.NRGBA{R: 145, G: 70, B: 255, A: 255}
+	white := color.NRGBA{R: 255, G: 255, B: 255, A: 255}
+
 	img := image.NewNRGBA(image.Rect(0, 0, 16, 16))
 	for y := 0; y < 16; y++ {
 		for x := 0; x < 16; x++ {
-			dx, dy := float64(x)-7.5, float64(y)-7.5
-			if dx*dx+dy*dy <= 49 {
-				img.Set(x, y, color.NRGBA{R: r, G: g, B: b, A: 255})
+			switch pixels[y][x] {
+			case P:
+				img.Set(x, y, purple)
+			case W:
+				img.Set(x, y, white)
 			}
 		}
 	}
+
 	var pngBuf bytes.Buffer
 	png.Encode(&pngBuf, img)
 	pngData := pngBuf.Bytes()
@@ -126,10 +156,7 @@ func makeTrayIcon(r, g, b uint8) []byte {
 	return ico.Bytes()
 }
 
-var (
-	iconGreen = makeTrayIcon(50, 200, 50)
-	iconRed   = makeTrayIcon(200, 50, 50)
-)
+var trayIcon = makeTrayIcon()
 
 func main() {
 	initOutputDir()
@@ -137,7 +164,7 @@ func main() {
 }
 
 func onReady() {
-	systray.SetIcon(iconGreen)
+	systray.SetIcon(trayIcon)
 	systray.SetTooltip(appName + " — listening on :" + port)
 
 	mStatus := systray.AddMenuItem("● Listening on :"+port, "")
@@ -158,13 +185,13 @@ func onReady() {
 					stopServer()
 					mStatus.SetTitle("○ Stopped")
 					mToggle.SetTitle("Start Listening")
-					systray.SetIcon(iconRed)
+					systray.SetIcon(trayIcon)
 					systray.SetTooltip(appName + " — stopped")
 				} else {
 					go startServer()
 					mStatus.SetTitle("● Listening on :" + port)
 					mToggle.SetTitle("Stop Listening")
-					systray.SetIcon(iconGreen)
+					systray.SetIcon(trayIcon)
 					systray.SetTooltip(appName + " — listening on :" + port)
 				}
 			case <-mStartup.ClickedCh:
