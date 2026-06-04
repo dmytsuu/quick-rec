@@ -1,5 +1,9 @@
 # QuickRec
 
+[![Download](https://img.shields.io/github/v/release/dmytsuu/quick-rec?label=Download&style=for-the-badge&logo=github)](https://github.com/dmytsuu/quick-rec/releases/latest)
+[![QuickRec.exe](https://img.shields.io/badge/QuickRec.exe-tray_app-blue?style=for-the-badge)](https://github.com/dmytsuu/quick-rec/releases/latest/download/QuickRec.exe)
+[![Extension](https://img.shields.io/badge/extension.zip-chrome-green?style=for-the-badge)](https://github.com/dmytsuu/quick-rec/releases/latest/download/QuickRec-extension.zip)
+
 Windows system-tray app + Chrome extension that adds a **⏺ REC** button to Twitch streams. One click opens a new terminal window running `yt-dlp` for that channel.
 
 ## Requirements
