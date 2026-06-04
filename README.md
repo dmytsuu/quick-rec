@@ -10,41 +10,40 @@ Windows system-tray app + Chrome extension that adds a **⏺ REC** button to Twi
 
 ## Requirements
 
-- [Go 1.21+](https://go.dev/dl/)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) — must be in PATH
 - Windows 10/11
 - Google Chrome
 
-## Setup
+## Install
 
-### 1. Build the tray app
+### 1. Download
 
-```powershell
-cd tray-app
-go mod tidy
-go build -ldflags="-H windowsgui" -o QuickRec.exe .
-```
+Grab both files from the [latest release](https://github.com/dmytsuu/quick-rec/releases/latest):
+- `QuickRec.exe`
+- `QuickRec-extension.zip`
 
-The `-H windowsgui` flag suppresses the console window on launch.
+### 2. Run the tray app
 
-### 2. Load the Chrome extension
+Launch `QuickRec.exe` — a green dot appears in the system tray. That's it.
 
-1. Open `chrome://extensions`
-2. Enable **Developer mode** (top right)
-3. Click **Load unpacked** → select the `extension/` folder
+> To start automatically with Windows: right-click the tray icon → **Start at Startup**.
 
-### 3. Run
+### 3. Load the extension
 
-Launch `QuickRec.exe` — it appears in the system tray.  
-Navigate to any Twitch channel — the **⏺ REC** button appears in the player controls bar.
+1. Unzip `QuickRec-extension.zip` anywhere
+2. Open `chrome://extensions`
+3. Enable **Developer mode** (top right toggle)
+4. Click **Load unpacked** → select the unzipped folder
+
+Navigate to any Twitch channel — **⏺ REC** appears in the player controls bar.
 
 ## Tray menu
 
 | Item | Action |
 |---|---|
-| ● Listening on :9999 | status indicator (disabled) |
+| ● Listening on :9999 | status indicator |
 | Stop / Start Listening | toggle the HTTP server |
-| Start at Startup | adds/removes from `HKCU\...\Run` registry |
+| Start at Startup | adds/removes from Windows startup |
 | Quit | exit |
 
 ## How it works
@@ -59,8 +58,18 @@ Navigate to any Twitch channel — the **⏺ REC** button appears in the player 
                               [new terminal window]
 ```
 
-The server binds exclusively to `127.0.0.1` — not reachable from outside the machine.  
-Only URLs containing `twitch.tv/` are accepted.
+Server binds to `127.0.0.1` only — not reachable from outside the machine.  
+Recordings saved to `%USERPROFILE%\Videos\TwitchVODs`.
+
+## Build from source
+
+Requires [Go 1.21+](https://go.dev/dl/).
+
+```powershell
+cd tray-app
+go mod tidy
+go build -ldflags="-H windowsgui" -o QuickRec.exe .
+```
 
 ## File structure
 
