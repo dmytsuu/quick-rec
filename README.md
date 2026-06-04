@@ -6,6 +6,8 @@
 
 Windows system-tray app + Chrome extension that adds a **⏺ REC** button to Twitch streams. One click opens a new terminal window running `yt-dlp` for that channel.
 
+![preview](preview.png)
+
 ## Requirements
 
 - [Go 1.21+](https://go.dev/dl/)
