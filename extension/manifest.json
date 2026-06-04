@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "QuickRec",
+  "version": "1.0",
+  "description": "Launch yt-dlp for current Twitch stream",
+  "host_permissions": [
+    "https://www.twitch.tv/*",
+    "http://127.0.0.1:9999/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.twitch.tv/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
