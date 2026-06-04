@@ -25,7 +25,7 @@ function injectButton() {
   btn.textContent = '⏺ REC';
   btn.title = 'Start yt-dlp recording';
   btn.style.cssText = [
-    'background: #9147ff',
+    'background: transparent',
     'color: #fff',
     'border: none',
     'border-radius: 4px',
@@ -38,8 +38,8 @@ function injectButton() {
     'transition: background 0.15s',
   ].join(';');
 
-  btn.addEventListener('mouseenter', () => { btn.style.background = '#772ce8'; });
-  btn.addEventListener('mouseleave', () => { btn.style.background = '#9147ff'; });
+  btn.addEventListener('mouseenter', () => { btn.style.background = 'rgba(255,255,255,0.1)'; });
+  btn.addEventListener('mouseleave', () => { btn.style.background = 'transparent'; });
 
   btn.addEventListener('click', async () => {
     const url = window.location.href.split('?')[0];
@@ -62,7 +62,7 @@ function injectButton() {
 
     setTimeout(() => {
       btn.textContent = '⏺ REC';
-      btn.style.background = '#9147ff';
+      btn.style.background = 'transparent';
     }, 2500);
   });
 
